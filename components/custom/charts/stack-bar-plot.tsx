@@ -1,30 +1,9 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { StackBarChartData } from "./bar-plot";
-// import { IGroupedData } from "./types";
+import { StackBarChartProps, TooltipType } from "@/lib/types";
+import { sum } from "@/lib/utils";
 
-interface Props {
-  data: StackBarChartData[];
-  width?: number;
-  height?: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
-}
-interface TooltipType {
-  x: number;
-  y: number;
-  value: Record<string, number>;
-  //  {
-  //   valueA: number;
-  //   valueB: number;
-  // };
-}
 
-function sum(values: number[]) {
-  return values.reduce((prev, value) => prev + value, 0);
-}
 
 export function StackBarChart({
   data,
@@ -34,7 +13,7 @@ export function StackBarChart({
   marginRight = 40,
   marginBottom = 40,
   marginLeft = 40,
-}: Props) {
+}: StackBarChartProps) {
   const [tooltip, setTooltip] = useState<TooltipType | null>();
 
   const axisBottomRef = useRef<SVGGElement>(null);

@@ -1,21 +1,7 @@
+import { LinePlotPropType } from "@/lib/types";
 import * as d3 from "d3";
-import { useRef, useEffect, RefObject, useState } from "react";
+import { useRef, useEffect } from "react";
 
-interface LinePlotPropType {
-  data: number[];
-  width?: number;
-  height?: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
-}
-
-interface TooltipType {
-  x: number;
-  y: number;
-  value: number;
-}
 export default function LinePlot({
   data,
   width = 540,
@@ -25,7 +11,6 @@ export default function LinePlot({
   marginBottom = 50,
   marginLeft = 40,
 }: LinePlotPropType) {
-  const [tooltip, setTooltip] = useState<TooltipType>();
   const gx = useRef<SVGGElement>(null);
   const gy = useRef<SVGGElement>(null);
   const x = d3.scaleLinear(
@@ -62,16 +47,6 @@ export default function LinePlot({
           d={line(data)?.toString()}
         />
       </svg>
-      {tooltip && (
-        <div
-          className="tooltip bg-white rounded-lg px-5 border"
-          style={{
-            position: "fixed",
-            top: tooltip.y - 20,
-            left: tooltip.x + 5,
-          }}
-        ></div>
-      )}
     </div>
   );
 }

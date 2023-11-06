@@ -11,111 +11,107 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 import { Separator } from "@/components/ui/separator";
-import {
-  BarChart,
-  BarChartData,
-  StackBarChartData,
-} from "@/components/custom/charts/bar-plot";
-import { Button } from "@/components/ui/button";
+import { BarChart } from "@/components/custom/charts/bar-plot";
 import { StackBarChart } from "@/components/custom/charts/stack-bar-plot";
-import { Payment, columns } from "@/components/custom/table/column";
+import { columns } from "@/components/custom/table/column";
 import { DataTable } from "@/components/custom/table/data-table";
 import { DialogCloseButton } from "@/components/custom/dialog-button";
+import {
+  BAR_CHART_DATA,
+  STACKBAR_CHART_DATA,
+  DATA_TABLE_DATA,
+} from "@/lib/data";
 
 const Dashboard = () => {
-  const [data, setData] = useState<number[]>(() =>
-    d3.ticks(-2, 8, 4).map(Math.cos)
-  );
+  const [data, setData] = useState<{
+    line: any;
+    bar: any;
+    stackBar: any;
+    dataTable: any;
+  }>(() => {
+    return {
+      line: d3.ticks(-2, 8, 4).map(Math.cos),
+      bar: BAR_CHART_DATA,
+      stackBar: STACKBAR_CHART_DATA,
+      dataTable: DATA_TABLE_DATA,
+    };
+  });
 
-  const handleInvoiceUpload = () => {};
+  const changeData = () => {
+    const randomNumber = (min: number, max: number) =>
+      Math.floor(Math.random() * (max - min + 1)) + min;
 
-  const BAR_CHART_DATA: BarChartData[] = [
-    { label: "Jan 01-07", value: 10 },
-    { label: "Jan 08-14", value: 100 },
-    { label: "Jan 15-21", value: 50 },
-    { label: "Jan 22-31", value: 70 },
-  ];
+    const generateBarData = () => {
+      return BAR_CHART_DATA.map((bd) => {
+        return {
+          ...bd,
+          value: randomNumber(1, bd.value),
+        };
+      });
+    };
+    const generateStackBarData = () => {
+      return STACKBAR_CHART_DATA.map((sbd) => {
+        return {
+          ...sbd,
+          valueA: randomNumber(1, sbd.valueA),
+          valueB: randomNumber(1, sbd.valueB),
+        };
+      });
+    };
+    const generateDataTableData = () => {
+      return DATA_TABLE_DATA.map((dt) => {
+        return {
+          ...dt,
+          thisMonth: randomNumber(1, +dt.thisMonth),
+          ytd: randomNumber(1, +dt.ytd),
+        };
+      });
+    };
 
-  const STACKBAR_CHART_DATA: StackBarChartData[] = [
-    { label: "January", valueA: 30, valueB: 60 },
-    { label: "February", valueA: 20, valueB: 70 },
-    { label: "March", valueA: 10, valueB: 80 },
-    { label: "April", valueA: 10, valueB: 120 },
-  ];
-
-  const DATA_TABLE_DATA: Payment[] = [
-    {
-      id: "1",
-      account: "Sales",
-      thisMonth: "1,940.33",
-      ytd: "11,222.45",
-    },
-    {
-      id: "2",
-      account: "Advertizing",
-      thisMonth: "1,123.33",
-      ytd: "15,222.45",
-    },
-    {
-      id: "3",
-      account: "Inventory",
-      thisMonth: "4,940.33",
-      ytd: "34,222.45",
-    },
-    {
-      id: "4",
-      account: "Entertainment",
-      thisMonth: "5,940.33",
-      ytd: "66,222.45",
-    },
-    {
-      id: "5",
-      account: "Product",
-      thisMonth: "940.33",
-      ytd: "11,423.45",
-    },
-  ];
+    setData((prev) => {
+      return {
+        ...prev,
+        line: d3.ticks(-2, randomNumber(1, 10), 4).map(Math.cos),
+        bar: generateBarData(),
+        stackBar: generateStackBarData(),
+        dataTable: generateDataTableData(),
+      };
+    });
+  };
 
   return (
-    <div className="grid grid-cols-2 gap-5">
+    <div className="xl:grid hidden lg:grid-cols-2 gap-5 ">
       <div className="rounded-lg bg-white">
         <div className="flex justify-between items-center p-3  ">
           <p className="font-semibold ">Checking account</p>
           <div className="flex  items-center gap-2">
-            <Select>
+            <Select onValueChange={changeData}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Manage" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Option 1</SelectItem>
-                <SelectItem value="dark">Option 2</SelectItem>
-                <SelectItem value="system">Option 3</SelectItem>
+                <SelectItem value="option1">Option 1</SelectItem>
+                <SelectItem value="option2">Option 2</SelectItem>
+                <SelectItem value="option3">Option 3</SelectItem>
               </SelectContent>
             </Select>
-            <Select>
+            <Select onValueChange={changeData}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Option 1</SelectItem>
-                <SelectItem value="dark">Option 2</SelectItem>
-                <SelectItem value="system">Option 3</SelectItem>
+                <SelectItem value="January">January</SelectItem>
+                <SelectItem value="February">February</SelectItem>
+                <SelectItem value="March">March</SelectItem>
+                <SelectItem value="April">April</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
         <Separator className="h-[2px]" />
-        <LinePlot data={data} />
+        <LinePlot data={data.line} />
       </div>
       <div className="rounded-lg bg-white">
         <div className="flex justify-between items-center p-3  ">
@@ -125,7 +121,7 @@ const Dashboard = () => {
           </div>
         </div>
         <Separator className="h-[2px]" />
-        <BarChart data={BAR_CHART_DATA} />
+        <BarChart data={data.bar} />
       </div>
       <div className="rounded-lg bg-white">
         <div className="flex justify-between items-center p-4  ">
@@ -135,15 +131,15 @@ const Dashboard = () => {
             <div className="w-3 h-3 bg-[#16a34a] rounded-sm"></div>Out
           </div>
         </div>
-        <Separator className="h-[2px]" />
-        <StackBarChart data={STACKBAR_CHART_DATA} />
+        <Separator className="h-[3px]" />
+        <StackBarChart data={data.stackBar} />
       </div>
       <div className="rounded-lg bg-white">
         <div className="flex justify-between items-center p-4  ">
           <p className="font-semibold ">Account Watchlist</p>
         </div>
-        <Separator className="h-[2px]" />
-        <DataTable columns={columns} data={DATA_TABLE_DATA} />
+        <Separator className="h-[3px]" />
+        <DataTable columns={columns} data={data.dataTable} />
       </div>
     </div>
   );
