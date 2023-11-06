@@ -1,6 +1,5 @@
 import * as d3 from "d3";
 import { useRef, useEffect, RefObject, useState } from "react";
-import "./lineplot.css";
 
 interface LinePlotPropType {
   data: number[];
