@@ -1,54 +1,11 @@
-import { useEffect, useRef, useState, MouseEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import { axisBottom, scaleBand, scaleLinear, select } from "d3";
 import {
-  axisBottom,
-  ScaleBand,
-  scaleBand,
-  ScaleLinear,
-  scaleLinear,
-  select,
-} from "d3";
-
-interface TooltipType {
-  x: number;
-  y: number;
-  value: number;
-}
-export interface BarChartData {
-  label: string;
-  value: number;
-}
-export interface StackBarChartData {
-  label: string;
-  valueA: number;
-  valueB: number;
-}
-
-interface BarChartProps {
-  data: BarChartData[];
-  width?: number;
-  height?: number;
-  marginTop?: number;
-  marginRight?: number;
-  marginBottom?: number;
-  marginLeft?: number;
-}
-interface AxisBottomProps {
-  scale: ScaleBand<string>;
-  transform: string;
-}
-
-interface AxisLeftProps {
-  scale: ScaleLinear<number, number, never>;
-}
-
-interface BarsProps {
-  data: BarChartProps["data"];
-  height: number;
-  scaleX: AxisBottomProps["scale"];
-  scaleY: AxisLeftProps["scale"];
-  onMouseEnter: (e: MouseEvent<SVGPathElement>, idx: number) => void;
-  onMouseLeave: () => void;
-}
+  AxisBottomProps,
+  BarChartProps,
+  BarsProps,
+  TooltipType,
+} from "@/lib/types";
 
 function AxisBottom({ scale, transform }: AxisBottomProps) {
   const ref = useRef<SVGGElement>(null);

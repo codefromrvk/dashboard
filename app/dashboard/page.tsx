@@ -15,7 +15,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { BarChart } from "@/components/custom/charts/bar-plot";
 import { StackBarChart } from "@/components/custom/charts/stack-bar-plot";
-import { columns } from "@/components/custom/table/column";
+import { DataTableType, columns } from "@/components/custom/table/column";
 import { DataTable } from "@/components/custom/table/data-table";
 import { DialogCloseButton } from "@/components/custom/dialog-button";
 import {
@@ -23,13 +23,20 @@ import {
   STACKBAR_CHART_DATA,
   DATA_TABLE_DATA,
 } from "@/lib/data";
+import {
+  generateBarData,
+  generateDataTableData,
+  generateStackBarData,
+  randomNumber,
+} from "@/lib/utils";
+import { BarChartData, StackBarChartData } from "@/lib/types";
 
 const Dashboard = () => {
   const [data, setData] = useState<{
-    line: any;
-    bar: any;
-    stackBar: any;
-    dataTable: any;
+    line: number[];
+    bar: BarChartData[];
+    stackBar: StackBarChartData[];
+    dataTable: DataTableType[];
   }>(() => {
     return {
       line: d3.ticks(-2, 8, 4).map(Math.cos),
@@ -40,36 +47,6 @@ const Dashboard = () => {
   });
 
   const changeData = () => {
-    const randomNumber = (min: number, max: number) =>
-      Math.floor(Math.random() * (max - min + 1)) + min;
-
-    const generateBarData = () => {
-      return BAR_CHART_DATA.map((bd) => {
-        return {
-          ...bd,
-          value: randomNumber(1, bd.value),
-        };
-      });
-    };
-    const generateStackBarData = () => {
-      return STACKBAR_CHART_DATA.map((sbd) => {
-        return {
-          ...sbd,
-          valueA: randomNumber(1, sbd.valueA),
-          valueB: randomNumber(1, sbd.valueB),
-        };
-      });
-    };
-    const generateDataTableData = () => {
-      return DATA_TABLE_DATA.map((dt) => {
-        return {
-          ...dt,
-          thisMonth: randomNumber(1, +dt.thisMonth),
-          ytd: randomNumber(1, +dt.ytd),
-        };
-      });
-    };
-
     setData((prev) => {
       return {
         ...prev,

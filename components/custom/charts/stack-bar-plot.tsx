@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { StackBarChartProps, TooltipType } from "@/lib/types";
+import { StackBarChartProps, TooltipMultiType } from "@/lib/types";
 import { sum } from "@/lib/utils";
 
 
@@ -14,7 +14,7 @@ export function StackBarChart({
   marginBottom = 40,
   marginLeft = 40,
 }: StackBarChartProps) {
-  const [tooltip, setTooltip] = useState<TooltipType | null>();
+  const [tooltip, setTooltip] = useState<TooltipMultiType | null>();
 
   const axisBottomRef = useRef<SVGGElement>(null);
   const axisLeftRef = useRef<SVGGElement>(null);
