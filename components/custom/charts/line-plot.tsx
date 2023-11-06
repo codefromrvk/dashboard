@@ -42,22 +42,26 @@ export default function LinePlot({
   useEffect(() => void d3.select(gy.current!).call(d3.axisLeft(y)), [gy, y]);
   return (
     <div className="px-4">
-      <svg width={width-marginBottom} height={height}>
+      <svg width={width - marginBottom} height={height}>
         <g
           ref={gx}
           fontSize={10}
           transform={`translate(0,${height - marginBottom + 10})`}
           color="transparent"
-          className="line-plot-axis"
+          className="axis-line"
         ></g>
-        <g ref={gy} transform={`translate(${marginLeft},0)`} color="transparent" className="line-plot-axis"/>
+        <g
+          ref={gy}
+          transform={`translate(${marginLeft},0)`}
+          color="transparent"
+          className="axis-line"
+        />
         <path
           fill="none"
           stroke="#16a34a"
           strokeWidth="3"
           d={line(data)?.toString()}
         />
-
       </svg>
       {tooltip && (
         <div

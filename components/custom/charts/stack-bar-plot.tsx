@@ -36,22 +36,16 @@ export function StackBarChart({
   marginLeft = 40,
 }: Props) {
   const [tooltip, setTooltip] = useState<TooltipType | null>();
-  // const data=[
-  //   { label: "Apples", values: [60, 80, 100] },
-  //   { label: "Bananas", values: [160, 200, 120] },
-  //   { label: "Oranges", values: [60, 40, 10] }
-  // ];
+
   const axisBottomRef = useRef<SVGGElement>(null);
   const axisLeftRef = useRef<SVGGElement>(null);
 
-  // const margin = { top: 20, right: 40, bottom: 40, left: 40 };
   const derivedWidth = width - marginLeft - marginRight;
   const derivedHeight = height - marginTop - marginBottom;
 
   const subgroups = ["valueA", "valueB"];
 
   const labels = data.map((d) => d.label || "");
-  console.log({ labels });
 
   const max = Math.max(
     ...data.map((d) => sum([d.valueB, d.valueB].map(Number)))
@@ -83,16 +77,15 @@ export function StackBarChart({
 
   return (
     <div>
-      <svg width={width} height={height+10}>
+      <svg width={width} height={height + 10}>
         <g transform={`translate(${marginLeft}, ${marginTop})`}>
           <g
             ref={axisBottomRef}
             transform={`translate(0, ${derivedHeight})`}
             color="transparent"
-            className="line-plot-axis"
+            className="axis-line"
           />
           {stacked.map((data, index) => {
-            console.log({ data });
             return (
               <g key={`group-${index}`} fill={color(data.key)}>
                 {data.map((d, index) => {
