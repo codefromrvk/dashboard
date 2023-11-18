@@ -45,7 +45,7 @@ export default function LinePlot({
     svg.select(".x-axis").call(
       d3
         .axisBottom(x)
-        // .ticks(d3.timeDay)
+        .ticks(d3.timeDay.every(5))
         .tickFormat(d3.timeFormat("%d %b"))
     );
 
