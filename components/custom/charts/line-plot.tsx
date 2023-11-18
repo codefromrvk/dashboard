@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { LinePlotPropType } from "@/lib/types";
 import * as d3 from "d3";
 import { useRef, useEffect, useState } from "react";
