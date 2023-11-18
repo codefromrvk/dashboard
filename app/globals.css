@@ -59,7 +59,11 @@
 }
 
 .axis-line text {
-  fill: #bac2cf;
+  fill: #595d63;
   font-size: 0.8rem;
+  font-weight: 700;
+}
+.multi-axis-line text {
+  fill: #595d63;
   font-weight: 700;
 }

@@ -17,6 +17,7 @@ export interface TooltipMultiType {
 }
 export interface LinePlotPropType {
     data: number[];
+    lineChartData?:any,
     width?: number;
     height?: number;
     marginTop?: number;
