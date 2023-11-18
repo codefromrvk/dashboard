@@ -227,7 +227,7 @@ const Dashboard = () => {
         {selectedData.state && filteredData?.length ? (
           <LinePlot data={filteredData} lineChartData={filteredData} />
         ) : (
-          <div className="text-3xl flex justify-center items-center h-full">
+          <div className="text-xl flex justify-center items-center h-full">
             Loading...
           </div>
         )}
