@@ -151,7 +151,6 @@ const Dashboard = () => {
     // return _filteredData;
   }, [lineChartData, selectedData]);
 
-  console.log({ filteredData });
 
   return (
     <div className="xl:grid hidden lg:grid-cols-2 gap-5 ">
