@@ -31,9 +31,12 @@ import {
   generateStackBarData,
   randomNumber,
 } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+
 import { BarChartData, StackBarChartData } from "@/lib/types";
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false);
   const [lineChartData, setLineChartData] = useState<Record<string, string>>();
   const [selectedData, setSelectedData] = useState({
     from: "2020-03-26",
@@ -55,11 +58,13 @@ const Dashboard = () => {
     };
   });
   useEffect(() => {
+    setLoading(true);
     async function getData() {
       const url = process.env.NEXT_PUBLIC_URL;
       const res = await fetch(url!);
       const data = await res.json();
       setLineChartData(data);
+      setLoading(false);
     }
     getData();
   }, []);
@@ -151,65 +156,76 @@ const Dashboard = () => {
     // return _filteredData;
   }, [lineChartData, selectedData]);
 
-
   return (
     <div className="xl:grid hidden lg:grid-cols-2 gap-5 ">
       <div className="rounded-lg bg-white">
-        <p className="font-semibold my-2 p-3">Line - Chart</p>
-        <div className="flex justify-between items-center p-3  ">
-          <div className="flex  items-center gap-2">
-            <Select
-              value={selectedData.state}
-              onValueChange={(val) => changeData("state", val)}
-            >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="State" />
-              </SelectTrigger>
-              <SelectContent className="max-h-44">
-                {lineChartData &&
-                  Object.keys(lineChartData)?.map((state, i) => {
+        <div className="flex">
+          <p className="font-semibold my-2 p-3">Covid Stats</p>
+          <div className="flex justify-around items-center gap-2 p-3">
+            {!loading && filteredData?.length ? (
+              <Select
+                value={selectedData.state}
+                onValueChange={(val) => changeData("state", val)}
+              >
+                <SelectTrigger className="w-[100px]">
+                  <SelectValue placeholder="State" />
+                </SelectTrigger>
+                <SelectContent className="max-h-44">
+                  {lineChartData &&
+                    Object.keys(lineChartData)?.map((state, i) => {
+                      return (
+                        <SelectItem key={i} value={state}>
+                          {state}
+                        </SelectItem>
+                      );
+                    })}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Skeleton className="w-[100px] h-[40px]" />
+            )}
+            {!loading && filteredData?.length ? (
+              <Select
+                value={selectedData.from}
+                onValueChange={(val) => changeData("from", val)}
+              >
+                <SelectTrigger className="w-[130px]">
+                  <SelectValue placeholder="From" />
+                </SelectTrigger>
+                <SelectContent className="max-h-44">
+                  {dates?.map((date, i) => {
                     return (
-                      <SelectItem key={i} value={state}>
-                        {state}
+                      <SelectItem key={i} value={date}>
+                        {date}
                       </SelectItem>
                     );
                   })}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedData.from}
-              onValueChange={(val) => changeData("from", val)}
-            >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="From" />
-              </SelectTrigger>
-              <SelectContent className="max-h-44">
-                {dates?.map((date, i) => {
-                  return (
-                    <SelectItem key={i} value={date}>
-                      {date}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <Select
-              value={selectedData.to}
-              onValueChange={(val) => changeData("to", val)}
-            >
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="To" />
-              </SelectTrigger>
-              <SelectContent className="max-h-44">
-                {dates?.map((date, i) => {
-                  return (
-                    <SelectItem key={i} value={date}>
-                      {date}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+                </SelectContent>
+              </Select>
+            ) : (
+              <Skeleton className="w-[130px] h-[40px]" />
+            )}
+            {!loading && filteredData?.length ? (
+              <Select
+                value={selectedData.to}
+                onValueChange={(val) => changeData("to", val)}
+              >
+                <SelectTrigger className="w-[130px]">
+                  <SelectValue placeholder="To" />
+                </SelectTrigger>
+                <SelectContent className="max-h-44">
+                  {dates?.map((date, i) => {
+                    return (
+                      <SelectItem key={i} value={date}>
+                        {date}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Skeleton className="w-[130px] h-[40px]" />
+            )}
             {/* <Select onValueChange={changeData}>
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Month" />
@@ -223,12 +239,15 @@ const Dashboard = () => {
             </Select> */}
           </div>
         </div>
+
         <Separator className="h-[2px]" />
         {selectedData.state && filteredData?.length ? (
           <LinePlot data={filteredData} lineChartData={filteredData} />
         ) : (
-          <div className="text-xl flex justify-center items-center h-full">
-            Loading...
+          <div className="text-xl flex flex-col justify-center items-center  gap-2 m-4">
+            <Skeleton className="w-full h-[75px]" />
+            <Skeleton className="w-full h-[75px]" />
+            <Skeleton className="w-full h-[75px]" />
           </div>
         )}
       </div>
