@@ -45,9 +45,13 @@ export default function LinePlot({
     svg.select(".x-axis").call(
       d3
         .axisBottom(x)
-        .ticks(d3.timeDay.every(5))
+        // .ticks(d3.timeDay.every(10))
         .tickFormat(d3.timeFormat("%d %b"))
-    );
+    ).selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", ".15em")
+    .attr("transform", "rotate(-35)");
 
     svg.select(".y-axis").call(d3.axisLeft(y));
     svg
@@ -59,17 +63,23 @@ export default function LinePlot({
     const valueLine = d3
       .line()
       .x((d) => x(d.date))
-      .y((d) => y(d.confirmed));
+      .y((d) => y(d.confirmed))
+      .curve(d3.curveBasis);
+      // const line = d3.line((d, i) => x(i), y)
 
     const valueLineA = d3
       .line()
       .x((d) => x(d.date))
-      .y((d) => y(d.recovered));
+      .y((d) => y(d.recovered))
+      .curve(d3.curveBasis);
+      
 
     const valueLineB = d3
       .line()
       .x((d) => x(d.date))
-      .y((d) => y2(d.deceased));
+      .y((d) => y2(d.deceased))
+      .curve(d3.curveBasis);
+
 
     svg.select(".line").datum(data).attr("d", valueLine);
     svg.select(".lineA").datum(data).attr("d", valueLineA);
