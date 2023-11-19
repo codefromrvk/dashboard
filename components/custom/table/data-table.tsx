@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({
                 return (
                   <TableHead
                     key={header.id}
-                    className={`text-[#bac2cf]  }`}
+                    className={`text-[#8a8b8d]  }`}
                     style={{
                       width:
                         header.column.columnDef.header === "Account"
