@@ -15,13 +15,14 @@ import {
 } from "@/components/ui/popover"
 
 export function DatePicker({name,dateRange,date,changeData}) {
+    const [calendarOpen, setCalendarOpen] = React.useState(false);
 //   const [date, setDate] = React.useState<Date>()
 // console.log(date);
 
 // console.log({date},format(new Date(date), "PPP"))
 
   return (
-    <Popover>
+    <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -46,7 +47,9 @@ export function DatePicker({name,dateRange,date,changeData}) {
           selected={new Date(date)}
           onSelect={(val)=> {
             changeData(name,val?.toLocaleDateString().split("T")[0])
+            setCalendarOpen(false);
             }
+            
         }
           initialFocus
         />
