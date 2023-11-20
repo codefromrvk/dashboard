@@ -36,7 +36,25 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BarChartData, StackBarChartData } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import { DatePicker } from "@/components/custom/date-picker";
 
+
+export function getMaxDate(dateArray) {
+  if (dateArray.length === 0) {
+    return null; // or handle the empty array case as per your requirement
+  }
+
+  return new Date(Math.max(...dateArray.map((date) => new Date(date))));
+}
+
+export function getMinDate(dateArray) {
+  if (dateArray.length === 0) {
+    return null; // or handle the empty array case as per your requirement
+  }
+
+  return new Date(Math.min(...dateArray.map((date) => new Date(date))));
+}
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [lineChartData, setLineChartData] = useState<Record<string, string>>();
@@ -173,21 +191,7 @@ const Dashboard = () => {
     return {};
   }, [lineChartData, selectedData]);
 
-  function getMaxDate(dateArray) {
-    if (dateArray.length === 0) {
-      return null; // or handle the empty array case as per your requirement
-    }
 
-    return new Date(Math.max(...dateArray.map((date) => new Date(date))));
-  }
-
-  function getMinDate(dateArray) {
-    if (dateArray.length === 0) {
-      return null; // or handle the empty array case as per your requirement
-    }
-
-    return new Date(Math.min(...dateArray.map((date) => new Date(date))));
-  }
   // const max = getMaxDate()
 
   return (
@@ -202,11 +206,13 @@ const Dashboard = () => {
           max={dateRange.max}
           min={dateRange.min}
         /> */}
-        <div className="flex">
-          <p className="font-semibold my-2 p-3">Covid Stats</p>
+        <div className="flex flex-col">
+          <p className="font-semibold p-3 my-2">Covid Stats</p>
+        <Separator className="h-[2px]" />
+
           <div className="flex justify-around items-center gap-2 p-3">
             {/* {!loading && filteredData?.length ? ( */}
-            <div>
+            <div className="flex flex-col">
               <Label>State</Label>
               <Select
                 value={selectedData.state}
@@ -232,35 +238,38 @@ const Dashboard = () => {
             ) : (
               <Skeleton className="w-[100px] h-[40px]" />
             )}*/}
-            <div>
+            <div className="flex flex-col">
               <Label>From</Label>
-              <Input
+              <DatePicker name="from" dateRange={dateRange} date={selectedData.from} changeData={changeData}/>
+
+              {/* <Input
                 type="date"
                 className="w-[130px]"
-                onChange={(e) => {
+                onBlur={(e) => {
                   changeData("from", e.target.value);
                 }}
                 defaultValue={dateRange.min}
                 max={dateRange.max}
                 min={dateRange.min}
-              />
+              /> */}
             </div>
             {/* ) : (
               <Skeleton className="w-[130px] h-[40px]" />
             )} */}
             {/* {!loading && filteredData?.length ? ( */}
-            <div>
+            <div className="flex flex-col">
               <Label>To</Label>
-              <Input
+              <DatePicker name="to" dateRange={dateRange} date={selectedData.to} changeData={changeData}/>
+              {/* <Input
                 type="date"
                 className="w-[130px]"
-                onChange={(e) => {
+                onBlur={(e) => {
                   changeData("to", e.target.value);
                 }}
                 defaultValue={dateRange.max}
                 max={dateRange.max}
                 min={dateRange.min}
-              />
+              /> */}
             </div>
             {/* ) : (
               <Skeleton className="w-[130px] h-[40px]" />
@@ -279,7 +288,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <Separator className="h-[2px]" />
         {loading && (
           <div className="text-xl flex flex-col justify-center items-center  gap-2 m-4">
             <Skeleton className="w-full h-[75px]" />
