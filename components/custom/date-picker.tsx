@@ -1,7 +1,7 @@
 //@ts-nocheck
 "use client"
 
-import * as React from "react"
+import {useState} from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
@@ -15,11 +15,7 @@ import {
 } from "@/components/ui/popover"
 
 export function DatePicker({name,dateRange,date,changeData}) {
-    const [calendarOpen, setCalendarOpen] = React.useState(false);
-//   const [date, setDate] = React.useState<Date>()
-// console.log(date);
-
-// console.log({date},format(new Date(date), "PPP"))
+    const [calendarOpen, setCalendarOpen] = useState(false);
 
   return (
     <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
@@ -48,8 +44,7 @@ export function DatePicker({name,dateRange,date,changeData}) {
           onSelect={(val)=> {
             changeData(name,val?.toLocaleDateString().split("T")[0])
             setCalendarOpen(false);
-            }
-            
+            } 
         }
           initialFocus
         />

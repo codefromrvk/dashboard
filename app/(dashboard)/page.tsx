@@ -25,24 +25,17 @@ import {
   STACKBAR_CHART_DATA,
   DATA_TABLE_DATA,
 } from "@/lib/data";
-import {
-  generateBarData,
-  generateDataTableData,
-  generateStackBarData,
-  randomNumber,
-} from "@/lib/utils";
+
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { BarChartData, StackBarChartData } from "@/lib/types";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
 import { DatePicker } from "@/components/custom/date-picker";
 
 
  function getMaxDate(dateArray) {
   if (dateArray.length === 0) {
-    return null; // or handle the empty array case as per your requirement
+    return null; 
   }
 
   return new Date(Math.max(...dateArray.map((date) => new Date(date))));
@@ -50,7 +43,7 @@ import { DatePicker } from "@/components/custom/date-picker";
 
  function getMinDate(dateArray) {
   if (dateArray.length === 0) {
-    return null; // or handle the empty array case as per your requirement
+    return null; 
   }
 
   return new Date(Math.min(...dateArray.map((date) => new Date(date))));
@@ -96,40 +89,7 @@ const Dashboard = () => {
     }
     getData();
   }, []);
-  const changeData = (type: string, val: string) => {
-    setSelectedData((prev) => {
-      if (type === "state") {
-        const dates = Object.keys(lineChartData[selectedData.state].dates);
 
-        return {
-          state: val,
-          to: getMaxDate(dates).toISOString().split("T")[0],
-          from: getMinDate(dates).toISOString().split("T")[0],
-        };
-      }
-      return { ...prev, [type]: val };
-    });
-    // setData((prev) => {
-    //   return {
-    //     ...prev,
-    //     line: d3.ticks(-2, randomNumber(1, 10), 4).map(Math.cos),
-    //     bar: generateBarData(),
-    //     stackBar: generateStackBarData(),
-    //     dataTable: generateDataTableData(),
-    //   };
-    // });
-  };
-
-  // const dates = useMemo(() => {
-  //   if (lineChartData) {
-  //     // console.log("d", Object.keys(lineChartData));
-  //     // const data ={
-  //     //   dates:Object.keys(lineChartData[selectedData.state]?.dates),
-  //     //   states:Object.keys(lineChartData)
-  //     // }
-  //     return Object.keys(lineChartData[selectedData.state]?.dates);
-  //   }
-  // }, [lineChartData, selectedData]);
 
   const filteredData = useMemo(() => {
     if (
@@ -141,7 +101,7 @@ const Dashboard = () => {
       const dates = lineChartData[selectedData.state].dates;
 
       if (dates) {
-        const _d = Object.keys(dates)
+        const _dates = Object.keys(dates)
           .filter((date) => {
             return (
               new Date(date) > new Date(selectedData.from) &&
@@ -166,18 +126,9 @@ const Dashboard = () => {
             };
           });
 
-        return _d;
-        // Object.values(dates).forEach((d) => {
-        //   const confirmedVal = d.delta?.confirmed || 0;
-        //   const recoveredVal = d.delta?.recovered || 0;
-        //   const deceasedVal = d.delta?.desceased || 0;
-        //   _filteredData.confirmed.push(confirmedVal);
-        //   _filteredData.recovered.push(recoveredVal);
-        //   _filteredData.desceased.push(deceasedVal);
-        // });
+        return _dates;
       }
     }
-    // return _filteredData;
   }, [lineChartData, selectedData]);
 
   const dateRange = useMemo(() => {
@@ -192,26 +143,28 @@ const Dashboard = () => {
   }, [lineChartData, selectedData]);
 
 
-  // const max = getMaxDate()
+  const changeData = (type: string, val: string) => {
+    setSelectedData((prev) => {
+      if (type === "state") {
+        const dates = Object.keys(lineChartData[selectedData.state].dates);
+        return {
+          state: val,
+          to: getMaxDate(dates).toISOString().split("T")[0],
+          from: getMinDate(dates).toISOString().split("T")[0],
+        };
+      }
+      return { ...prev, [type]: val };
+    });
+  };
 
   return (
     <div className="xl:grid hidden lg:grid-cols-2 gap-5 ">
       <div className="rounded-lg bg-white">
-        {/* <Input
-          type="date"
-          onChange={(e) => {
-            changeData("to", e.target.value);
-          }}
-          defaultValue={dateRange.min}
-          max={dateRange.max}
-          min={dateRange.min}
-        /> */}
         <div className="flex flex-col">
           <p className="font-semibold p-3 my-2">Covid Stats</p>
         <Separator className="h-[2px]" />
 
           <div className="flex justify-around items-center gap-2 p-3">
-            {/* {!loading && filteredData?.length ? ( */}
             <div className="flex flex-col">
               <Label>State</Label>
               <Select
@@ -233,11 +186,6 @@ const Dashboard = () => {
                 </SelectContent>
               </Select>
             </div>
-
-            {/* {!loading && filteredData?.length ? ( 
-            ) : (
-              <Skeleton className="w-[100px] h-[40px]" />
-            )}*/}
             <div className="flex flex-col">
               <Label>From</Label>
               <DatePicker name="from" dateRange={dateRange} date={selectedData.from} changeData={changeData}/>
@@ -253,10 +201,6 @@ const Dashboard = () => {
                 min={dateRange.min}
               /> */}
             </div>
-            {/* ) : (
-              <Skeleton className="w-[130px] h-[40px]" />
-            )} */}
-            {/* {!loading && filteredData?.length ? ( */}
             <div className="flex flex-col">
               <Label>To</Label>
               <DatePicker name="to" dateRange={dateRange} date={selectedData.to} changeData={changeData}/>
@@ -271,20 +215,7 @@ const Dashboard = () => {
                 min={dateRange.min}
               /> */}
             </div>
-            {/* ) : (
-              <Skeleton className="w-[130px] h-[40px]" />
-            )} */}
-            {/* <Select onValueChange={changeData}>
-              <SelectTrigger className="w-[150px]">
-                <SelectValue placeholder="Month" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="January">January</SelectItem>
-                <SelectItem value="February">February</SelectItem>
-                <SelectItem value="March">March</SelectItem>
-                <SelectItem value="April">April</SelectItem>
-              </SelectContent>
-            </Select> */}
+            
           </div>
         </div>
 
