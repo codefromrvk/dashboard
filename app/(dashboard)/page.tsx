@@ -40,7 +40,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { DatePicker } from "@/components/custom/date-picker";
 
 
-export function getMaxDate(dateArray) {
+ function getMaxDate(dateArray) {
   if (dateArray.length === 0) {
     return null; // or handle the empty array case as per your requirement
   }
@@ -48,7 +48,7 @@ export function getMaxDate(dateArray) {
   return new Date(Math.max(...dateArray.map((date) => new Date(date))));
 }
 
-export function getMinDate(dateArray) {
+ function getMinDate(dateArray) {
   if (dateArray.length === 0) {
     return null; // or handle the empty array case as per your requirement
   }
