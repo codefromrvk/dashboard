@@ -81,10 +81,12 @@ const Dashboard = () => {
   const changeData = (type: string, val: string) => {
     setSelectedData((prev) => {
       if (type === "state") {
+        const dates = Object.keys(lineChartData[selectedData.state].dates);
+
         return {
           state: val,
-          from: Object.keys(lineChartData[val].dates)[0],
-          to: Object.keys(lineChartData[val].dates)[15],
+          to: getMaxDate(dates).toISOString().split("T")[0],
+          from: getMinDate(dates).toISOString().split("T")[0],
         };
       }
       return { ...prev, [type]: val };
@@ -123,7 +125,6 @@ const Dashboard = () => {
       if (dates) {
         const _d = Object.keys(dates)
           .filter((date) => {
-      
             return (
               new Date(date) > new Date(selectedData.from) &&
               new Date(date) < new Date(selectedData.to)
@@ -147,7 +148,6 @@ const Dashboard = () => {
             };
           });
 
-
         return _d;
         // Object.values(dates).forEach((d) => {
         //   const confirmedVal = d.delta?.confirmed || 0;
@@ -158,14 +158,12 @@ const Dashboard = () => {
         //   _filteredData.desceased.push(deceasedVal);
         // });
       }
-    } 
+    }
     // return _filteredData;
   }, [lineChartData, selectedData]);
 
   const dateRange = useMemo(() => {
     if (lineChartData) {
-
-
       const dates = Object.keys(lineChartData[selectedData.state]?.dates);
       return {
         max: getMaxDate(dates).toISOString().split("T")[0],
@@ -191,7 +189,6 @@ const Dashboard = () => {
     return new Date(Math.min(...dateArray.map((date) => new Date(date))));
   }
   // const max = getMaxDate()
-
 
   return (
     <div className="xl:grid hidden lg:grid-cols-2 gap-5 ">
@@ -241,7 +238,6 @@ const Dashboard = () => {
                 type="date"
                 className="w-[130px]"
                 onChange={(e) => {
-
                   changeData("from", e.target.value);
                 }}
                 defaultValue={dateRange.min}
